@@ -1,0 +1,7 @@
+    {
+      p++;
+      ival = va_arg(ap, char *);
+      printf("%s", ival);
+    }
+    p++;
+  }
