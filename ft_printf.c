@@ -1,13 +1,5 @@
 #include "printf.h"
 
-void start_print(va_list ap, char type)
-{
-  if (type == 's')
-    case_s(ap);
-  else if (type == 'd')
-    case_d(ap);
-}
-
 int valid_type(char type)
 {
   char *p;
@@ -22,6 +14,26 @@ int valid_type(char type)
   return (0);
 }
 
+void start_print(va_list ap, char *p)
+{
+  while (*p)
+  {
+    if (*p == '%')
+    {
+      p++;
+      if (valid_type(*p))
+      {
+        check_flag(*p, ap);
+      }
+      else
+        write(1, "error", 6);
+    }
+    else
+      ft_putchar(*p);
+    p++;
+  }
+}
+
 void ft_printf(char *apFormat, ...)
 {
   va_list ap;
@@ -29,20 +41,7 @@ void ft_printf(char *apFormat, ...)
   
   p = apFormat;
   va_start(ap, apFormat);
-  while (*p)
-  {
-    if (*p == '%')
-    {
-      p++;
-      if (*p == '%')
-        ft_putchar('%');
-      else if (valid_type(*p))
-        start_print(ap, *p);
-    }
-    else
-      ft_putchar(*p);
-    p++;
-  }
+  start_print(ap, p);
   va_end(ap);
 }
 
@@ -50,7 +49,8 @@ int main()
 {
   char *a = "Sasha";
   int b = 25;
-  ft_printf("Hello, my name in %s.\nI'm %d, years old.\nThis is 100%% info", a, b);
+  int c = 10;
+  ft_printf("Hello, my name in %s.\nI'm %d, years old.\nThis is 100%% info !!%u!!", a, b, c);
   return (0);
 }
 
